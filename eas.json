@@ -46,6 +46,12 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "appleId": "ramon_fabrega_96@hotmail.com",
+        "appleTeamId": "GJYBE2UZXM",
+        "ascAppId": "6744988825"
+      }
+    }
   }
 }
