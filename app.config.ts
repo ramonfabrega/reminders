@@ -51,5 +51,16 @@ export default {
   web: {
     favicon: "./assets/favicon.png",
   },
-  plugins: ["expo-router"],
+  plugins: ["expo-router", "expo-sqlite"],
+  updates: {
+    url: "https://u.expo.dev/b23ba4e9-9385-46e4-a27a-a44cfc5cb8a5",
+  },
+  runtimeVersion: {
+    policy: "fingerprint",
+  },
+  extra: {
+    eas: {
+      projectId: "b23ba4e9-9385-46e4-a27a-a44cfc5cb8a5",
+    },
+  },
 } satisfies ExpoConfig;
