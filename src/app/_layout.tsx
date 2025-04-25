@@ -2,7 +2,11 @@ import { Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { SFSymbol, SymbolView } from "expo-symbols";
 
+import useUpdatesListener from "@/hooks/use-updates-listener";
+
 export default function RootLayout() {
+  useUpdatesListener();
+
   return (
     <>
       <StatusBar style="auto" />
@@ -10,21 +14,34 @@ export default function RootLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            tabBarIcon: icon({ focused: "house.fill", default: "house" }),
-            tabBarLabel: "Home",
+            tabBarIcon: icon({
+              active: "list.bullet",
+              inactive: "list.bullet",
+            }),
+            tabBarLabel: "All",
           }}
         />
         <Tabs.Screen
-          name="two"
+          name="recent"
           options={{
-            tabBarIcon: icon({ focused: "camera.fill", default: "camera" }),
+            tabBarIcon: icon({ active: "alarm.fill", inactive: "alarm" }),
+            tabBarLabel: "Next",
+          }}
+        />
+        <Tabs.Screen
+          name="camera"
+          options={{
+            tabBarIcon: icon({ active: "camera.fill", inactive: "camera" }),
             tabBarLabel: "Camera",
           }}
         />
         <Tabs.Screen
-          name="three"
+          name="settings"
           options={{
-            tabBarIcon: icon({ focused: "person.fill", default: "person" }),
+            tabBarIcon: icon({
+              active: "gearshape.fill",
+              inactive: "gearshape",
+            }),
             tabBarLabel: "Settings",
           }}
         />
@@ -34,11 +51,11 @@ export default function RootLayout() {
 }
 
 const icon =
-  (names: Record<"focused" | "default", SFSymbol>) =>
+  (names: Record<"active" | "inactive", SFSymbol>) =>
   (props: { focused: boolean; color: string; size: number }) =>
     (
       <SymbolView
-        name={props.focused ? names.focused : names.default}
+        name={props.focused ? names.active : names.inactive}
         type="hierarchical"
         size={props.size}
         tintColor={props.color}

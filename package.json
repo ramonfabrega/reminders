@@ -1,20 +1,23 @@
 {
   "name": "reminders",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
+    "prebuild": "expo prebuild --clean",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "update:ios": "bun eas update -p ios --channel production",
-    "deploy:ios": "bun eas build --platform ios --profile production --auto-submit"
+    "update:ios": "eas update -p ios --channel production",
+    "deploy:ios": "eas build --platform ios --profile production --auto-submit"
   },
   "dependencies": {
     "@expo/ui": "~0.1.1-alpha.4",
     "expo": "^53.0.0-preview.11",
+    "expo-application": "~6.1.2",
     "expo-constants": "~17.1.2",
     "expo-dev-client": "~5.1.3",
+    "expo-insights": "~0.9.2",
     "expo-linking": "~7.1.2",
     "expo-router": "~5.0.2-preview.5",
     "expo-sqlite": "~15.2.6",
@@ -24,7 +27,8 @@
     "react": "19.0.0",
     "react-native": "0.79.1",
     "react-native-safe-area-context": "5.3.0",
-    "react-native-screens": "~4.10.0"
+    "react-native-screens": "~4.10.0",
+    "react-native-vision-camera": "^4.6.4"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

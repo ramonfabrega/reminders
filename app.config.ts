@@ -43,15 +43,23 @@ export default {
   },
   android: {
     adaptiveIcon: {
-      foregroundImage: "./assets/icons/android.png",
+      foregroundImage: "./assets/icon.png",
       backgroundColor: "#ffffff",
     },
+    edgeToEdgeEnabled: true,
     package: config.bundleIdentifier,
   },
   web: {
     favicon: "./assets/favicon.png",
   },
-  plugins: ["expo-router", "expo-sqlite"],
+  plugins: [
+    "expo-router",
+    "expo-sqlite",
+    [
+      "react-native-vision-camera",
+      { cameraPermissionText: "$(PRODUCT_NAME) needs access to your Camera." },
+    ],
+  ],
   updates: {
     url: "https://u.expo.dev/b23ba4e9-9385-46e4-a27a-a44cfc5cb8a5",
   },

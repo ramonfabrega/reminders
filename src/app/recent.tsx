@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 export default function Page() {
   return (
     <View style={styles.container}>
-      <Text>2</Text>
+      <Text>recent</Text>
     </View>
   );
 }
