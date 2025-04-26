@@ -1,4 +1,4 @@
-import { Tabs } from "expo-router";
+import { Stack, Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { SFSymbol, SymbolView } from "expo-symbols";
 
@@ -18,21 +18,21 @@ export default function RootLayout() {
               active: "list.bullet",
               inactive: "list.bullet",
             }),
-            tabBarLabel: "All",
+            title: "Reminders",
           }}
         />
         <Tabs.Screen
           name="recent"
           options={{
             tabBarIcon: icon({ active: "alarm.fill", inactive: "alarm" }),
-            tabBarLabel: "Next",
+            title: "Next",
           }}
         />
         <Tabs.Screen
           name="camera"
           options={{
             tabBarIcon: icon({ active: "camera.fill", inactive: "camera" }),
-            tabBarLabel: "Camera",
+            title: "Camera",
           }}
         />
         <Tabs.Screen
@@ -42,7 +42,7 @@ export default function RootLayout() {
               active: "gearshape.fill",
               inactive: "gearshape",
             }),
-            tabBarLabel: "Settings",
+            title: "Settings",
           }}
         />
       </Tabs>

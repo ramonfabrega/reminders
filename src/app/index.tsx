@@ -1,21 +1,29 @@
-import { StyleSheet, Text, View } from "react-native";
+import { useReminderStore } from "@/stores/reminder-store";
 
-import { ColorPicker } from "@expo/ui/swift-ui";
-import { useState } from "react";
-
+import { StyleSheet, useWindowDimensions, View, Text } from "react-native";
+import * as SwiftUI from "@expo/ui/swift-ui";
 export default function Page() {
-  const [color, setColor] = useState("");
+  const reminders = useReminderStore((s) => s.reminders);
+  const groups = useReminderStore((s) => s.groups);
+
+  console.log("reminders", reminders);
+
+  const { width } = useWindowDimensions();
+
   return (
     <View style={styles.container}>
-      <Text>home page</Text>
-
-      <ColorPicker
-        selection={color}
-        onValueChanged={setColor}
-        style={{ width: 35, height: 35 }}
-        supportsOpacity={false}
-      />
-      <Text>home page</Text>
+      <SwiftUI.List style={{ width }} moveEnabled editModeEnabled>
+        <SwiftUI.Label title="foo" />
+        <SwiftUI.Label title="bar" />
+        <View>
+          <Text>foot</Text>
+          <Text>foot</Text>
+        </View>
+        <Text>
+          moo
+          <Text>zoo</Text>
+        </Text>
+      </SwiftUI.List>
     </View>
   );
 }
