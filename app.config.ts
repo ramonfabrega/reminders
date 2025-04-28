@@ -2,23 +2,23 @@ import { ExpoConfig } from "expo/config";
 import pkg from "./package.json";
 
 function getConfig() {
+  const name = "Document Reminders";
+  const bundleIdentifier = "com.ramonfabrega.reminders";
+
   switch (process.env.EXPO_PUBLIC_APP_ENV) {
     case "development":
       return {
-        name: "Reminders (Dev)",
-        bundleIdentifier: "com.ramonfabrega.reminders.dev",
+        name: `${name} (Dev)`,
+        bundleIdentifier: `${bundleIdentifier}.dev`,
       };
     case "preview":
       return {
-        name: "Reminders (Preview)",
-        bundleIdentifier: "com.ramonfabrega.reminders.preview",
+        name: `${name} (Preview)`,
+        bundleIdentifier: `${bundleIdentifier}.preview`,
       };
     case "production":
     default:
-      return {
-        name: "Reminders",
-        bundleIdentifier: "com.ramonfabrega.reminders",
-      };
+      return { name, bundleIdentifier };
   }
 }
 
