@@ -1,0 +1,47 @@
+{
+  "configVersion": 0,
+  "apple": {
+    "version": "1.0",
+    "release": {
+      "automaticRelease": true
+    },
+    "info": {
+      "en-US": {
+        "title": "Expired Reminder",
+        "subtitle": "Don't forget!",
+        "keywords": ["reminders, "],
+        "privacyPolicyUrl": "https://reminders.expo.app/privacy",
+        "supportUrl": "https://reminders.expo.app/support"
+      }
+    },
+    "categories": ["UTILITIES"],
+    "advisory": {
+      "ageRatingOverride": "NONE",
+      "alcoholTobaccoOrDrugUseOrReferences": "NONE",
+      "contests": "NONE",
+      "gambling": false,
+      "gamblingSimulated": "NONE",
+      "horrorOrFearThemes": "NONE",
+      "kidsAgeBand": null,
+      "koreaAgeRatingOverride": "NONE",
+      "lootBox": false,
+      "matureOrSuggestiveThemes": "NONE",
+      "medicalOrTreatmentInformation": "NONE",
+      "profanityOrCrudeHumor": "NONE",
+      "sexualContentGraphicAndNudity": "NONE",
+      "sexualContentOrNudity": "NONE",
+      "unrestrictedWebAccess": false,
+      "violenceCartoonOrFantasy": "NONE",
+      "violenceRealistic": "NONE",
+      "violenceRealisticProlongedGraphicOrSadistic": "NONE"
+    },
+    "review": {
+      "firstName": "Ramon",
+      "lastName": "Fabrega",
+      "email": "ramonfabrega0@gmail.com",
+      "phone": "+50769831570",
+      "demoRequired": false,
+      "notes": "no login necessary, currently displays a simple list of dummy reminder tree"
+    }
+  }
+}

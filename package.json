@@ -11,7 +11,8 @@
     "update:ios": "eas update -p ios --channel production",
     "deploy:ios": "eas build --platform ios --profile production --auto-submit",
     "build:web": "expo export --platform web --clear",
-    "deploy:web": "bun build:web && eas deploy"
+    "deploy:web": "bun build:web && eas deploy",
+    "metatadata:ios": "bun eas metadata:push"
   },
   "dependencies": {
     "@expo/ui": "~0.1.1-alpha.5",
