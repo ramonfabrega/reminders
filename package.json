@@ -7,12 +7,12 @@
     "prebuild": "expo prebuild --clean",
     "android": "expo run:android",
     "ios": "expo run:ios",
+    "ios:update": "eas update -p ios --channel production",
+    "ios:deploy": "eas build --platform ios --profile production --auto-submit && bun ios:metadata",
+    "ios:metatadata": "eas metadata:push",
     "web": "expo start --web",
-    "update:ios": "eas update -p ios --channel production",
-    "deploy:ios": "eas build --platform ios --profile production --auto-submit",
-    "build:web": "expo export --platform web --clear",
-    "deploy:web": "bun build:web && eas deploy",
-    "metatadata:ios": "bun eas metadata:push"
+    "web:build": "expo export --platform web --clear",
+    "web:deploy": "bun web:build && eas deploy"
   },
   "dependencies": {
     "@expo/ui": "~0.1.1-alpha.5",
