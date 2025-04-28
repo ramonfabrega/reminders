@@ -1,8 +1,15 @@
 import { useReminderStore } from "@/stores/reminder-store";
 
-import { StyleSheet, useWindowDimensions, View, Text } from "react-native";
+import {
+  StyleSheet,
+  useWindowDimensions,
+  View,
+  Text,
+  Button,
+} from "react-native";
 import * as SwiftUI from "@expo/ui/swift-ui";
-export default function Page() {
+
+export default function ReminderList() {
   const reminders = useReminderStore((s) => s.reminders);
   const groups = useReminderStore((s) => s.groups);
 

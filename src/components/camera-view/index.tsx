@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
 import {
-  useCameraDevice,
   useCameraDevices,
   useCameraPermission,
 } from "react-native-vision-camera";
@@ -8,7 +7,7 @@ import {
 import { Button } from "@expo/ui/swift-ui";
 import * as Linking from "expo-linking";
 
-export default function Page() {
+export default function CameraView() {
   const { hasPermission, requestPermission } = useCameraPermission();
 
   const devices = useCameraDevices();

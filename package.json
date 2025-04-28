@@ -9,7 +9,8 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "update:ios": "eas update -p ios --channel production",
-    "deploy:ios": "eas build --platform ios --profile production --auto-submit"
+    "deploy:ios": "eas build --platform ios --profile production --auto-submit",
+    "build:web": "expo export --platform web --clear"
   },
   "dependencies": {
     "@expo/ui": "~0.1.1-alpha.5",
@@ -26,10 +27,12 @@
     "expo-symbols": "~0.4.3",
     "expo-updates": "~0.28.7",
     "react": "19.0.0",
+    "react-dom": "19.0.0",
     "react-native": "0.79.1",
     "react-native-safe-area-context": "5.3.0",
     "react-native-screens": "~4.10.0",
     "react-native-vision-camera": "^4.6.4",
+    "react-native-web": "^0.20.0",
     "zustand": "^5.0.3"
   },
   "devDependencies": {

@@ -32,7 +32,7 @@ export default {
   owner: "ramonfabrega",
   orientation: "portrait",
   newArchEnabled: true,
-  platforms: ["ios"],
+  platforms: ["ios", "web"],
   icon: "./assets/icon.png",
   ios: {
     supportsTablet: true,
@@ -51,6 +51,8 @@ export default {
   },
   web: {
     favicon: "./assets/favicon.png",
+    bundler: "metro",
+    output: "static",
   },
   plugins: [
     "expo-router",
@@ -60,6 +62,9 @@ export default {
       { cameraPermissionText: "$(PRODUCT_NAME) needs access to your Camera." },
     ],
   ],
+  experiments: {
+    typedRoutes: true,
+  },
   updates: {
     url: "https://u.expo.dev/b23ba4e9-9385-46e4-a27a-a44cfc5cb8a5",
   },
