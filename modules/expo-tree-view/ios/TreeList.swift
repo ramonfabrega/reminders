@@ -160,6 +160,8 @@ struct TreeNodeView: View {
 }
 
 
+#if SWIFT_PACKAGE
 #Preview {
   TreeList()
 }
+#endif
