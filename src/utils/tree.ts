@@ -29,14 +29,9 @@ export function buildTree(
 
     // Get reminders for this group (O(1) lookup)
     const groupReminders = remindersByGroup.get(group.id) ?? [];
-    const childReminders = groupReminders.map((r) =>
-      newNode({ name: r.name, children: null })
-    );
+    const childReminders = groupReminders.map(newNode);
 
-    return newNode({
-      name: group.name,
-      children: [...childGroups, ...childReminders],
-    });
+    return newNode({ ...group, children: [...childGroups, ...childReminders] });
   };
 
   // Start with root groups (parentGroupId is null)
@@ -46,9 +41,7 @@ export function buildTree(
   const rootNodes = rootGroups.map(buildGroupNode);
 
   // Add root-level reminders (groupId is null)
-  const rootReminders = (remindersByGroup.get("root") ?? []).map((r) =>
-    newNode({ name: r.name, children: null })
-  );
+  const rootReminders = (remindersByGroup.get("root") ?? []).map(newNode);
 
   return [...rootNodes, ...rootReminders];
 }

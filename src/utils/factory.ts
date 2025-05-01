@@ -21,9 +21,11 @@ export function newGroup(params?: Partial<Group>): Group {
   };
 }
 
-export function newNode(node: Omit<TreeViewNode, "id">): TreeViewNode {
+export function newNode(node: Partial<TreeViewNode>): TreeViewNode {
   return {
     id: randomUUID(),
+    name: "new node",
+    children: null,
     ...node,
   };
 }

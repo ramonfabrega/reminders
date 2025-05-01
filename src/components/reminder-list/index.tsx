@@ -3,14 +3,10 @@ import { buildTree } from "@/utils/tree";
 
 import * as SwiftUI from "@expo/ui/swift-ui-primitives";
 import { TreeView } from "@modules/expo-tree-view";
+import { Button } from "react-native";
 
 export default function ReminderList() {
-  const reminders = useReminderStore((s) => s.reminders);
-  const groups = useReminderStore((s) => s.groups);
-
-  const addReminder = useReminderStore((s) => s.addReminder);
-
-  const nodes = buildTree(reminders, groups);
+  const { reminders, groups, addReminder, deleteReminder } = useReminderStore();
 
   console.log(JSON.stringify(reminders, null, 2));
 
@@ -19,8 +15,14 @@ export default function ReminderList() {
       <SwiftUI.VStack>
         <TreeView
           title="Reminders"
-          nodes={nodes}
-          onNewPress={() => addReminder("New Reminder")}
+          nodes={buildTree(reminders, groups)}
+          onNewPress={() => {
+            addReminder("New Reminder");
+          }}
+          onDeletePress={(e) => {
+            console.log("deleting", e.nativeEvent.id);
+            deleteReminder(e.nativeEvent.id);
+          }}
         />
       </SwiftUI.VStack>
     </SwiftUI.Host>
