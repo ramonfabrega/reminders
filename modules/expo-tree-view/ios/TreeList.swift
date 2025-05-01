@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct Node: Hashable, Identifiable, Codable {
-    var id = UUID()
+    let id: String
     let name: String
     var children: [Node]? = nil
 }
@@ -11,11 +11,12 @@ struct TreeList: View {
     let title: String
     let nodes: [Node]
     let onNewPress: () -> Void
+    let onDeletePress: (String) -> Void
     @State private var lastSelected: String? = nil
     @State private var lastDeleted: String? = nil
     @State private var searchText: String = ""
-    @State private var expanded = Set<UUID>()
-    @State private var savedExpanded: Set<UUID>? = nil
+    @State private var expanded = Set<String>()
+    @State private var savedExpanded: Set<String>? = nil
 
     private func filtered(_ items: [Node]) -> [Node] {
         items.compactMap { node in
@@ -34,9 +35,9 @@ struct TreeList: View {
         }
     }
 
-    private func allBranchIDs(in items: [Node]) -> [UUID] {
+    private func allBranchIDs(in items: [Node]) -> [String] {
         items.flatMap { node in
-            var ids: [UUID] = []
+            var ids: [String] = []
             if let kids = node.children, !kids.isEmpty {
                 ids.append(node.id)
                 ids.append(contentsOf: allBranchIDs(in: kids))
@@ -68,7 +69,13 @@ struct TreeList: View {
         NavigationView {
             List {
                 ForEach(searchText.isEmpty ? nodes : filtered(nodes)) { item in
-                    TreeNodeView(node: item, expanded: $expanded, lastSelected: $lastSelected, lastDeleted: $lastDeleted)
+                    TreeNodeView(
+                        node: item,
+                        expanded: $expanded,
+                        lastSelected: $lastSelected,
+                        lastDeleted: $lastDeleted,
+                        onDeletePress: onDeletePress
+                    )
                 }
             }
             .navigationTitle(title)
@@ -119,9 +126,10 @@ struct TreeList: View {
 @available(iOS 17.0, *)
 struct TreeNodeView: View {
     let node: Node
-    @Binding var expanded: Set<UUID>
+    @Binding var expanded: Set<String>
     @Binding var lastSelected: String?
     @Binding var lastDeleted: String?
+    let onDeletePress: (String) -> Void
 
     var body: some View {
         if let children = node.children {
@@ -140,7 +148,13 @@ struct TreeNodeView: View {
                     )
                 ) {
                     ForEach(children) { child in
-                        TreeNodeView(node: child, expanded: $expanded, lastSelected: $lastSelected, lastDeleted: $lastDeleted)
+                        TreeNodeView(
+                            node: child,
+                            expanded: $expanded,
+                            lastSelected: $lastSelected,
+                            lastDeleted: $lastDeleted,
+                            onDeletePress: onDeletePress
+                        )
                     }
                 } label: {
                     Text("📁 \(node.name)")
@@ -157,7 +171,7 @@ struct TreeNodeView: View {
             .sensoryFeedback(.impact(weight:.light), trigger: lastSelected)
             .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                 Button(role: .destructive) {
-                    lastDeleted = node.name
+                    onDeletePress(node.id)
                 } label: {
                     Label("Delete", systemImage: "trash")
                 }
@@ -168,25 +182,28 @@ struct TreeNodeView: View {
 
 #if SWIFT_PACKAGE
 #Preview {
-    TreeList(title: "File System", nodes: [
-    Node(name: "users", children: [
-      Node(name: "user1234", children: [
-        Node(name: "Photos", children: [
-          Node(name: "photo001.jpg"),
-          Node(name: "photo002.jpg")
-        ]),
-        Node(name: "Movies", children: [
-          Node(name: "movie001.mp4")
-        ]),
-        Node(name: "Documents", children: [])
-      ]),
-      Node(name: "newuser", children: [
-        Node(name: "Documents", children: [])
-      ])
-    ]),
-    Node(name: "private", children: nil)
-]) {
-    // Implementation of onNewPress
-}
+    TreeList(
+        title: "File System",
+        nodes: [
+            Node(id: "1", name: "users", children: [
+                Node(id: "2", name: "user1234", children: [
+                    Node(id: "3", name: "Photos", children: [
+                        Node(id: "4", name: "photo001.jpg"),
+                        Node(id: "5", name: "photo002.jpg")
+                    ]),
+                    Node(id: "6", name: "Movies", children: [
+                        Node(id: "7", name: "movie001.mp4")
+                    ]),
+                    Node(id: "8", name: "Documents", children: [])
+                ]),
+                Node(id: "9", name: "newuser", children: [
+                    Node(id: "10", name: "Documents", children: [])
+                ])
+            ]),
+            Node(id: "11", name: "private", children: nil)
+        ],
+        onNewPress: {},
+        onDeletePress: { _ in }
+    )
 }
 #endif

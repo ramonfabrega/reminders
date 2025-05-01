@@ -5,6 +5,7 @@ class TreeViewProps: ExpoSwiftUI.ViewProps {
     @Field var title: String = ""
     @Field var nodes: String = ""
     var onNewPress = EventDispatcher()
+    var onDeletePress = EventDispatcher()
 }
 
 struct TreeView: ExpoSwiftUI.View {
@@ -23,7 +24,12 @@ struct TreeView: ExpoSwiftUI.View {
 
     var body: some View {
         if #available(iOS 17.0, *) {
-            TreeList(title: props.title, nodes: parseNodes(), onNewPress: { props.onNewPress() })
+            TreeList(
+                title: props.title,
+                nodes: parseNodes(),
+                onNewPress: { props.onNewPress() },
+                onDeletePress: { id in props.onDeletePress(["id": id]) }
+            )
         } else {
             EmptyView()
         }
