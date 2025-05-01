@@ -9,8 +9,6 @@ export default function ReminderList() {
 
   const nodes = buildTree(reminders, groups);
 
-  console.log(JSON.stringify({ reminders, groups, nodes }, null, 2));
-
   return (
     <SwiftUI.Host style={{ flex: 1 }}>
       <SwiftUI.VStack>

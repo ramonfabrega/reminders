@@ -132,47 +132,57 @@ struct TreeNodeView: View {
     @Binding var expanded: Set<String>
     let onSelect: (String) -> Void
     let onDelete: (String) -> Void
-    @State private var isSelected = false
-    @State private var deleteTriggered = false
 
     var body: some View {
         if let children = node.children {
             if children.isEmpty {
-                Text("📂 \(node.name)")
+                EmptyGroupNode(node: node, onDelete: onDelete)
             } else {
-                DisclosureGroup(
-                    isExpanded: Binding(
-                        get: { expanded.contains(node.id) },
-                        set: { newVal in
-                            withAnimation {
-                                if newVal { expanded.insert(node.id) }
-                                else { expanded.remove(node.id) }
-                            }
-                        }
-                    )
-                ) {
-                    ForEach(children) { child in
-                        TreeNodeView(
-                            node: child,
-                            expanded: $expanded,
-                            onSelect: onSelect,
-                            onDelete: onDelete
-                        )
-                    }
-                } label: {
-                    Text("📁 \(node.name)")
-                }
-                .sensoryFeedback(.impact(weight: .light), trigger: expanded.contains(node.id))
+                GroupNode(node: node, expanded: $expanded, onSelect: onSelect, onDelete: onDelete)
             }
         } else {
-            Button {
-                isSelected.toggle()
-                onSelect(node.id)
+            LeafNode(node: node, onSelect: onSelect, onDelete: onDelete)
+        }
+    }
+}
+
+@available(iOS 17.0, *)
+struct LeafNode: View {
+    let node: Node
+    let onSelect: (String) -> Void
+    let onDelete: (String) -> Void
+    @State private var isSelected = false
+    @State private var deleteTriggered = false
+
+    var body: some View {
+        Button {
+            isSelected.toggle()
+            onSelect(node.id)
+        } label: {
+            Text("📄 \(node.name)")
+        }
+        .tint(.primary)
+        .sensoryFeedback(.impact(weight:.light), trigger: isSelected)
+        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+            Button(role: .destructive) {
+                deleteTriggered.toggle()
+                onDelete(node.id)
             } label: {
-                Text("📄 \(node.name)")
+                Label("Delete", systemImage: "trash")
             }
-            .tint(.primary)
-            .sensoryFeedback(.impact(weight:.light), trigger: isSelected)
+        }
+        .sensoryFeedback(.impact(weight: .heavy), trigger: deleteTriggered)
+    }
+}
+
+@available(iOS 17.0, *)
+struct EmptyGroupNode: View {
+    let node: Node
+    let onDelete: (String) -> Void
+    @State private var deleteTriggered = false
+
+    var body: some View {
+        Text("📂 \(node.name)")
             .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                 Button(role: .destructive) {
                     deleteTriggered.toggle()
@@ -182,7 +192,40 @@ struct TreeNodeView: View {
                 }
             }
             .sensoryFeedback(.impact(weight: .heavy), trigger: deleteTriggered)
+    }
+}
+
+@available(iOS 17.0, *)
+struct GroupNode: View {
+    let node: Node
+    @Binding var expanded: Set<String>
+    let onSelect: (String) -> Void
+    let onDelete: (String) -> Void
+
+    var body: some View {
+        DisclosureGroup(
+            isExpanded: Binding(
+                get: { expanded.contains(node.id) },
+                set: { newVal in
+                    withAnimation {
+                        if newVal { expanded.insert(node.id) }
+                        else { expanded.remove(node.id) }
+                    }
+                }
+            )
+        ) {
+            ForEach(node.children!) { child in
+                TreeNodeView(
+                    node: child,
+                    expanded: $expanded,
+                    onSelect: onSelect,
+                    onDelete: onDelete
+                )
+            }
+        } label: {
+            Text("📁 \(node.name)")
         }
+        .sensoryFeedback(.impact(weight: .light), trigger: expanded.contains(node.id))
     }
 }
 
