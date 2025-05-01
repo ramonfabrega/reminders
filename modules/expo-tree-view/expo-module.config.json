@@ -1,6 +1,6 @@
 {
   "platforms": ["apple"],
   "apple": {
-    "modules": ["SampleButtonModule"]
+    "modules": ["SampleButtonModule", "TreeViewModule"]
   }
 }

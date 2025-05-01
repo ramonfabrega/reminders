@@ -1,2 +1,2 @@
-export { default as SampleButton } from "./src/SampleButton";
-export * from "./src/SampleButton.types";
+export * from "./src/SampleButton";
+export * from "./src/TreeView";
