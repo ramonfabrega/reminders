@@ -173,5 +173,3 @@ struct TreeNodeView: View {
         }
     }
 }
-
-
