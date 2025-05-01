@@ -16,6 +16,7 @@ struct TreeList: View {
     @State private var searchText: String = ""
     @State private var expanded = Set<String>()
     @State private var savedExpanded: Set<String>? = nil
+    @State private var newButtonPressed = false
 
     private func filtered(_ items: [Node]) -> [Node] {
         items.compactMap { node in
@@ -99,10 +100,14 @@ struct TreeList: View {
                     }
                 }
 
-                Button(action: onCreate) {
+                Button(action: {
+                    newButtonPressed.toggle()
+                    onCreate()
+                }) {
                     Image(systemName: "plus")
                     Text("New")
                 }
+                .sensoryFeedback(.impact(weight: .medium), trigger: newButtonPressed)
             }
             .searchable(text: $searchText, prompt: "Search…")
             .onChange(of: searchText) {
