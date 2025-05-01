@@ -10,16 +10,18 @@ type ReminderStore = {
   deleteReminder: (id: string) => void;
 };
 
-const groups: Group[] = [
-  newGroup({ name: "Personal" }),
-  newGroup({ name: "Work" }),
-];
+const personal = newGroup({ name: "Personal" });
+const work = newGroup({ name: "Work" });
+const dev = newGroup({ name: "Dev", groupId: work.id });
+
+const groups = [personal, work, dev];
 
 const reminders: Reminder[] = [
   newReminder({ name: "Doctor Appointment" }),
-  newReminder({ name: "Pasaporte", groupId: groups[0].id }),
-  newReminder({ name: "Cedula", groupId: groups[0].id }),
-  newReminder({ name: "Cloud password", groupId: groups[1].id }),
+  newReminder({ name: "Pasaporte", groupId: personal.id }),
+  newReminder({ name: "Cedula", groupId: personal.id }),
+  newReminder({ name: "Slack password", groupId: work.id }),
+  newReminder({ name: "Cloud password", groupId: dev.id }),
 ];
 
 export const useReminderStore = create<ReminderStore>((set) => ({

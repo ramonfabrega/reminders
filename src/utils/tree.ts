@@ -21,10 +21,9 @@ export function buildTree(
 
   // Helper function to build a node from a group
   const buildGroupNode = (group: Group): TreeViewNode => {
-    // Get all child groups
-    const childGroups = group.childGroupIds
-      .map((id) => groupMap.get(id))
-      .filter((g): g is Group => g !== undefined)
+    // Get all child groups by looking for groups that have this group as their parent
+    const childGroups = groups
+      .filter((g) => g.groupId === group.id)
       .map(buildGroupNode);
 
     // Get reminders for this group (O(1) lookup)
@@ -34,8 +33,8 @@ export function buildTree(
     return newNode({ ...group, children: [...childGroups, ...childReminders] });
   };
 
-  // Start with root groups (parentGroupId is null)
-  const rootGroups = groups.filter((g) => g.parentGroupId === null);
+  // Start with root groups (groupId is null)
+  const rootGroups = groups.filter((g) => g.groupId === null);
 
   // Build the tree starting from root groups
   const rootNodes = rootGroups.map(buildGroupNode);

@@ -1,12 +1,11 @@
 export type Reminder = {
   id: string;
   name: string;
-  groupId: string | null; // null means it's at root level
+  groupId: string | null;
 };
 
 export type Group = {
   id: string;
   name: string;
-  parentGroupId: string | null; // null means it's a root level group
-  childGroupIds: string[]; // array of child group IDs
+  groupId: string | null;
 };

@@ -15,8 +15,7 @@ export function newGroup(params?: Partial<Group>): Group {
   return {
     id: randomUUID(),
     name: "new group",
-    parentGroupId: null,
-    childGroupIds: [],
+    groupId: null,
     ...params,
   };
 }

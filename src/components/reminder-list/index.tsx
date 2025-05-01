@@ -7,14 +7,16 @@ import { TreeView } from "@modules/expo-tree-view";
 export default function ReminderList() {
   const { reminders, groups, addReminder, deleteReminder } = useReminderStore();
 
-  console.log(JSON.stringify(reminders, null, 2));
+  const nodes = buildTree(reminders, groups);
+
+  console.log(JSON.stringify({ reminders, groups, nodes }, null, 2));
 
   return (
     <SwiftUI.Host style={{ flex: 1 }}>
       <SwiftUI.VStack>
         <TreeView
           title="Reminders"
-          nodes={buildTree(reminders, groups)}
+          nodes={nodes}
           onCreate={() => {
             addReminder("New Reminder");
           }}
