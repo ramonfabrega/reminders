@@ -4,8 +4,9 @@ import ExpoModulesCore
 class TreeViewProps: ExpoSwiftUI.ViewProps {
     @Field var title: String = ""
     @Field var nodes: String = ""
-    var onNewPress = EventDispatcher()
-    var onDeletePress = EventDispatcher()
+    var onCreate = EventDispatcher()
+    var onDelete = EventDispatcher()
+    var onSelect = EventDispatcher()
 }
 
 struct TreeView: ExpoSwiftUI.View {
@@ -27,8 +28,9 @@ struct TreeView: ExpoSwiftUI.View {
             TreeList(
                 title: props.title,
                 nodes: parseNodes(),
-                onNewPress: { props.onNewPress() },
-                onDeletePress: { id in props.onDeletePress(["id": id]) }
+                onCreate: { props.onCreate() },
+                onDelete: { id in props.onDelete(["id": id]) },
+                onSelect: { id in props.onSelect(["id": id]) }
             )
         } else {
             EmptyView()

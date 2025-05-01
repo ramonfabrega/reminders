@@ -14,8 +14,9 @@ type TouchEvent<T = {}> = NativeSyntheticEvent<T>;
 export type TreeViewProps = {
   title: string;
   nodes: TreeViewNode[];
-  onNewPress?: (e: TouchEvent) => void;
-  onDeletePress?: (e: TouchEvent<{ id: string }>) => void;
+  onCreate?: (e: TouchEvent) => void;
+  onDelete?: (e: TouchEvent<{ id: string }>) => void;
+  onSelect?: (e: TouchEvent<{ id: string }>) => void;
 };
 
 export function TreeView({ nodes, ...props }: TreeViewProps) {

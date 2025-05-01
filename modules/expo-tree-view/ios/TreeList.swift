@@ -10,10 +10,9 @@ struct Node: Hashable, Identifiable, Codable {
 struct TreeList: View {
     let title: String
     let nodes: [Node]
-    let onNewPress: () -> Void
-    let onDeletePress: (String) -> Void
-    @State private var lastSelected: String? = nil
-    @State private var lastDeleted: String? = nil
+    let onCreate: () -> Void
+    let onDelete: (String) -> Void
+    let onSelect: (String) -> Void
     @State private var searchText: String = ""
     @State private var expanded = Set<String>()
     @State private var savedExpanded: Set<String>? = nil
@@ -72,9 +71,8 @@ struct TreeList: View {
                     TreeNodeView(
                         node: item,
                         expanded: $expanded,
-                        lastSelected: $lastSelected,
-                        lastDeleted: $lastDeleted,
-                        onDeletePress: onDeletePress
+                        onSelect: onSelect,
+                        onDelete: onDelete
                     )
                 }
             }
@@ -101,7 +99,7 @@ struct TreeList: View {
                     }
                 }
 
-                Button(action: onNewPress) {
+                Button(action: onCreate) {
                     Image(systemName: "plus")
                     Text("New")
                 }
@@ -127,9 +125,9 @@ struct TreeList: View {
 struct TreeNodeView: View {
     let node: Node
     @Binding var expanded: Set<String>
-    @Binding var lastSelected: String?
-    @Binding var lastDeleted: String?
-    let onDeletePress: (String) -> Void
+    let onSelect: (String) -> Void
+    let onDelete: (String) -> Void
+    @State private var isSelected = false
 
     var body: some View {
         if let children = node.children {
@@ -151,9 +149,8 @@ struct TreeNodeView: View {
                         TreeNodeView(
                             node: child,
                             expanded: $expanded,
-                            lastSelected: $lastSelected,
-                            lastDeleted: $lastDeleted,
-                            onDeletePress: onDeletePress
+                            onSelect: onSelect,
+                            onDelete: onDelete
                         )
                     }
                 } label: {
@@ -163,15 +160,16 @@ struct TreeNodeView: View {
             }
         } else {
             Button {
-                lastSelected = node.name
+                isSelected.toggle()
+                onSelect(node.id)
             } label: {
                 Text("📄 \(node.name)")
             }
             .tint(.primary)
-            .sensoryFeedback(.impact(weight:.light), trigger: lastSelected)
+            .sensoryFeedback(.impact(weight:.light), trigger: isSelected)
             .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                 Button(role: .destructive) {
-                    onDeletePress(node.id)
+                    onDelete(node.id)
                 } label: {
                     Label("Delete", systemImage: "trash")
                 }
@@ -202,8 +200,9 @@ struct TreeNodeView: View {
             ]),
             Node(id: "11", name: "private", children: nil)
         ],
-        onNewPress: {},
-        onDeletePress: { _ in }
+        onCreate: {},
+        onDelete: { _ in },
+        onSelect: { _ in }
     )
 }
 #endif
