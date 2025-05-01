@@ -3,7 +3,6 @@ import { buildTree } from "@/utils/tree";
 
 import * as SwiftUI from "@expo/ui/swift-ui-primitives";
 import { TreeView } from "@modules/expo-tree-view";
-import { Button } from "react-native";
 
 export default function ReminderList() {
   const { reminders, groups, addReminder, deleteReminder } = useReminderStore();
