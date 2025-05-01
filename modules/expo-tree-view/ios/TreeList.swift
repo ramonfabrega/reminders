@@ -69,12 +69,7 @@ struct TreeList: View {
         NavigationView {
             List {
                 ForEach(searchText.isEmpty ? nodes : filtered(nodes)) { item in
-                    TreeNodeView(
-                        node: item,
-                        expanded: $expanded,
-                        onSelect: onSelect,
-                        onDelete: onDelete
-                    )
+                    TreeNodeView(node: item, expanded: $expanded, onSelect: onSelect, onDelete: onDelete)
                 }
             }
             .navigationTitle(title)
