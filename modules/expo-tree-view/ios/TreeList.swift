@@ -1,32 +1,15 @@
 import SwiftUI
 
-struct Node: Hashable, Identifiable {
+struct Node: Hashable, Identifiable, Codable {
     let id = UUID()
     let name: String
     var children: [Node]? = nil
 }
 
-let nodes: [Node] = [
-    Node(name: "users", children: [
-      Node(name: "user1234", children: [
-        Node(name: "Photos", children: [
-          Node(name: "photo001.jpg"),
-          Node(name: "photo002.jpg")
-        ]),
-        Node(name: "Movies", children: [
-          Node(name: "movie001.mp4")
-        ]),
-        Node(name: "Documents", children: [])
-      ]),
-      Node(name: "newuser", children: [
-        Node(name: "Documents", children: [])
-      ])
-    ]),
-    Node(name: "private", children: nil)
-]
-
 @available(iOS 17.0, *)
 struct TreeList: View {
+    let title: String
+    let nodes: [Node]
     @State private var lastSelected: String? = nil
     @State private var lastDeleted: String? = nil
     @State private var searchText: String = ""
@@ -87,7 +70,7 @@ struct TreeList: View {
                     TreeNodeView(node: item, expanded: $expanded, lastSelected: $lastSelected, lastDeleted: $lastDeleted)
                 }
             }
-            .navigationTitle("File System")
+            .navigationTitle(title)
             .toolbar {
                 Button(action: {
                     if allExpanded {
@@ -190,6 +173,23 @@ struct TreeNodeView: View {
 
 #if SWIFT_PACKAGE
 #Preview {
-  TreeList()
+    TreeList(title: "File System", nodes: [
+    Node(name: "users", children: [
+      Node(name: "user1234", children: [
+        Node(name: "Photos", children: [
+          Node(name: "photo001.jpg"),
+          Node(name: "photo002.jpg")
+        ]),
+        Node(name: "Movies", children: [
+          Node(name: "movie001.mp4")
+        ]),
+        Node(name: "Documents", children: [])
+      ]),
+      Node(name: "newuser", children: [
+        Node(name: "Documents", children: [])
+      ])
+    ]),
+    Node(name: "private", children: nil)
+])
 }
 #endif

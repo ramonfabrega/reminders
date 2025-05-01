@@ -1,4 +1,5 @@
 import { Group, Reminder } from "@/types";
+import { TreeViewNode } from "@modules/expo-tree-view";
 import { randomUUID } from "expo-crypto";
 
 export function newReminder(params?: Partial<Reminder>): Reminder {
@@ -17,5 +18,12 @@ export function newGroup(params?: Partial<Group>): Group {
     parentGroupId: null,
     childGroupIds: [],
     ...params,
+  };
+}
+
+export function newNode(node: Omit<TreeViewNode, "id">): TreeViewNode {
+  return {
+    id: randomUUID(),
+    ...node,
   };
 }
