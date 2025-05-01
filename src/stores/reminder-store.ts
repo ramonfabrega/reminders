@@ -6,6 +6,8 @@ import { newGroup, newReminder } from "@/utils/factory";
 type ReminderStore = {
   reminders: Reminder[];
   groups: Group[];
+  addReminder: (name: string, groupId?: string) => void;
+  deleteReminder: (id: string) => void;
 };
 
 const groups: Group[] = [
@@ -23,4 +25,12 @@ const reminders: Reminder[] = [
 export const useReminderStore = create<ReminderStore>((set) => ({
   reminders,
   groups,
+  addReminder: (name: string, groupId: string | null = null) =>
+    set((state) => ({
+      reminders: [...state.reminders, newReminder({ name, groupId })],
+    })),
+  deleteReminder: (id: string) =>
+    set((state) => ({
+      reminders: state.reminders.filter((r) => r.id !== id),
+    })),
 }));
