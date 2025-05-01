@@ -11,6 +11,7 @@ export type TreeViewNode = {
 export type TreeViewProps = {
   title: string;
   nodes: TreeViewNode[];
+  onNewPress?: () => void;
 };
 
 export function TreeView({ nodes, ...props }: TreeViewProps) {

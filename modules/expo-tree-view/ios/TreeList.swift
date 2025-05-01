@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct Node: Hashable, Identifiable, Codable {
-    let id = UUID()
+    var id = UUID()
     let name: String
     var children: [Node]? = nil
 }
@@ -10,6 +10,7 @@ struct Node: Hashable, Identifiable, Codable {
 struct TreeList: View {
     let title: String
     let nodes: [Node]
+    let onNewPress: () -> Void
     @State private var lastSelected: String? = nil
     @State private var lastDeleted: String? = nil
     @State private var searchText: String = ""
@@ -93,7 +94,7 @@ struct TreeList: View {
                     }
                 }
 
-                Button(action: { }) {
+                Button(action: onNewPress) {
                     Image(systemName: "plus")
                     Text("New")
                 }
@@ -112,12 +113,6 @@ struct TreeList: View {
                 }
             }
         }
-
-        VStack(alignment: .leading) {
-            Text("Last selected file: \(lastSelected ?? "none")")
-            Text("Last deleted file: \(lastDeleted ?? "none")")
-        }
-        .padding(.top, 8)
     }
 }
 
@@ -190,6 +185,8 @@ struct TreeNodeView: View {
       ])
     ]),
     Node(name: "private", children: nil)
-])
+]) {
+    // Implementation of onNewPress
+}
 }
 #endif

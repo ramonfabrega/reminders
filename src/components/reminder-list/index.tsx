@@ -17,7 +17,11 @@ export default function ReminderList() {
   return (
     <SwiftUI.Host style={{ flex: 1 }}>
       <SwiftUI.VStack>
-        <TreeView title="Reminders" nodes={nodes} />
+        <TreeView
+          title="Reminders"
+          nodes={nodes}
+          onNewPress={() => addReminder("New Reminder")}
+        />
       </SwiftUI.VStack>
     </SwiftUI.Host>
   );

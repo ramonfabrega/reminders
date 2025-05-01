@@ -4,6 +4,7 @@ import ExpoModulesCore
 class TreeViewProps: ExpoSwiftUI.ViewProps {
     @Field var title: String = ""
     @Field var nodes: String = ""
+    var onNewPress = EventDispatcher()
 }
 
 struct TreeView: ExpoSwiftUI.View {
@@ -22,7 +23,7 @@ struct TreeView: ExpoSwiftUI.View {
 
     var body: some View {
         if #available(iOS 17.0, *) {
-            TreeList(title: props.title, nodes: parseNodes())
+            TreeList(title: props.title, nodes: parseNodes(), onNewPress: { props.onNewPress() })
         } else {
             EmptyView()
         }
