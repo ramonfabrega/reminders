@@ -15,12 +15,15 @@ export default function ReminderList() {
         <TreeView
           title="Reminders"
           nodes={buildTree(reminders, groups)}
-          onNewPress={() => {
+          onCreate={() => {
             addReminder("New Reminder");
           }}
-          onDeletePress={(e) => {
+          onDelete={(e) => {
             console.log("deleting", e.nativeEvent.id);
             deleteReminder(e.nativeEvent.id);
+          }}
+          onSelect={(e) => {
+            console.log("selected", e.nativeEvent.id);
           }}
         />
       </SwiftUI.VStack>
