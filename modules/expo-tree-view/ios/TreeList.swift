@@ -133,6 +133,7 @@ struct TreeNodeView: View {
     let onSelect: (String) -> Void
     let onDelete: (String) -> Void
     @State private var isSelected = false
+    @State private var deleteTriggered = false
 
     var body: some View {
         if let children = node.children {
@@ -174,11 +175,13 @@ struct TreeNodeView: View {
             .sensoryFeedback(.impact(weight:.light), trigger: isSelected)
             .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                 Button(role: .destructive) {
+                    deleteTriggered.toggle()
                     onDelete(node.id)
                 } label: {
                     Label("Delete", systemImage: "trash")
                 }
             }
+            .sensoryFeedback(.impact(weight: .heavy), trigger: deleteTriggered)
         }
     }
 }
