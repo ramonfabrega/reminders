@@ -88,6 +88,33 @@ struct TreeList: View {
                 }
             }
             .navigationTitle("File System")
+            .toolbar {
+                Button(action: {
+                    if allExpanded {
+                        collapseAll()
+                    } else {
+                        expandAll()
+                    }
+                }) {
+                    HStack {
+                        Image(systemName: "chevron.up.chevron.down")
+                        ZStack {
+                            Text("Collapse All")
+                                .opacity(allExpanded ? 1 : 0)
+                                .animation(.easeInOut(duration: 0.2), value: allExpanded)
+                            Text("Expand All")
+                                .opacity(allExpanded ? 0 : 1)
+                                .animation(.easeInOut(duration: 0.2), value: allExpanded)
+                        }
+                        .fixedSize()
+                    }
+                }
+
+                Button(action: { }) {
+                    Image(systemName: "plus")
+                    Text("New")
+                }
+            }
             .searchable(text: $searchText, prompt: "Search…")
             .onChange(of: searchText) {
                 if searchText.isEmpty {
@@ -111,6 +138,7 @@ struct TreeList: View {
     }
 }
 
+@available(iOS 17.0, *)
 struct TreeNodeView: View {
     let node: Node
     @Binding var expanded: Set<UUID>
@@ -139,15 +167,16 @@ struct TreeNodeView: View {
                 } label: {
                     Text("📁 \(node.name)")
                 }
+                .sensoryFeedback(.impact(weight: .light), trigger: expanded.contains(node.id))
             }
         } else {
-
             Button {
                 lastSelected = node.name
             } label: {
                 Text("📄 \(node.name)")
             }
             .tint(.primary)
+            .sensoryFeedback(.impact(weight:.light), trigger: lastSelected)
             .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                 Button(role: .destructive) {
                     lastDeleted = node.name
@@ -158,7 +187,6 @@ struct TreeNodeView: View {
         }
     }
 }
-
 
 #if SWIFT_PACKAGE
 #Preview {
