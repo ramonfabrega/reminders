@@ -156,7 +156,6 @@ struct LeafNode: View {
         } label: {
             Text("📄 \(node.name)")
         }
-        .tint(.primary)
         .sensoryFeedback(.impact(weight:.light), trigger: isSelected)
         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
             Button(role: .destructive) {
@@ -185,6 +184,13 @@ struct EmptyGroupNode: View {
                 } label: {
                     Label("Delete", systemImage: "trash")
                 }
+
+                Button {
+                    // Add action here when needed
+                } label: {
+                    Label("Add", systemImage: "plus")
+                }
+                .tint(.accentColor)
             }
             .sensoryFeedback(.impact(weight: .heavy), trigger: deleteTriggered)
     }
@@ -219,6 +225,14 @@ struct GroupNode: View {
             }
         } label: {
             Text("📁 \(node.name)")
+                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                    Button {
+                        // Add action here when needed
+                    } label: {
+                        Label("Add", systemImage: "plus")
+                    }
+                    .tint(.accentColor)
+                }
         }
         .sensoryFeedback(.impact(weight: .light), trigger: expanded.contains(node.id))
     }
