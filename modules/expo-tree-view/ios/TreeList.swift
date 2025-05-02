@@ -65,11 +65,20 @@ struct TreeList: View {
         return !allBranchIds.isEmpty && allBranchIds.isSubset(of: expanded)
     }
 
+    private func handleCreate(parentId: String?) {
+        if let parentId = parentId {
+            withAnimation {
+                expanded.insert(parentId)
+            }
+        }
+        onCreate(parentId)
+    }
+
     var body: some View {
         NavigationView {
             List {
                 ForEach(searchText.isEmpty ? nodes : filtered(nodes)) { item in
-                    TreeNodeView(node: item, expanded: $expanded, onSelect: onSelect, onDelete: onDelete, onCreate: onCreate)
+                    TreeNodeView(node: item, expanded: $expanded, onSelect: onSelect, onDelete: onDelete, onCreate: handleCreate)
                 }
             }
             .navigationTitle(title)
