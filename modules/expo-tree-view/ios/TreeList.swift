@@ -101,19 +101,6 @@ struct TreeList: View {
         }
     }
 
-    private func expandAll() {
-        withAnimation {
-            let tree = searchText.isEmpty ? nodes : filtered(nodes)
-            expanded = Set(allBranchIDs(in: tree))
-        }
-    }
-
-    private func collapseAll() {
-        withAnimation {
-            expanded.removeAll()
-        }
-    }
-
     var allExpanded: Bool {
         let tree = searchText.isEmpty ? nodes : filtered(nodes)
         let allBranchIds = Set(allBranchIDs(in: tree))
@@ -137,27 +124,6 @@ struct TreeList: View {
             }
             .navigationTitle(title)
             .toolbar {
-                Button(action: {
-                    if allExpanded {
-                        collapseAll()
-                    } else {
-                        expandAll()
-                    }
-                }) {
-                    HStack {
-                        Image(systemName: "chevron.up.chevron.down")
-                        ZStack {
-                            Text("Collapse All")
-                                .opacity(allExpanded ? 1 : 0)
-                                .animation(.easeInOut(duration: 0.2), value: allExpanded)
-                            Text("Expand All")
-                                .opacity(allExpanded ? 0 : 1)
-                                .animation(.easeInOut(duration: 0.2), value: allExpanded)
-                        }
-                        .fixedSize()
-                    }
-                }
-
                 CreateActionButton(createActions: createActions, parentId: nil, onExpand: handleCreate)
             }
             .searchable(text: $searchText, prompt: "Search…")
@@ -246,7 +212,6 @@ struct EmptyGroupNode: View {
                 }
 
                 CreateActionButton(createActions: createActions, parentId: node.id, onExpand: onCreate)
-                    .tint(.accentColor)
             }
             .sensoryFeedback(.impact(weight: .heavy), trigger: deleteTriggered)
     }
