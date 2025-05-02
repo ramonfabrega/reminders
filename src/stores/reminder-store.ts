@@ -18,6 +18,9 @@ const groups = [personal, work, dev];
 
 const reminders: Reminder[] = [
   newReminder({ name: "Doctor Appointment" }),
+  newReminder({ name: "Foo" }),
+  newReminder({ name: "bar" }),
+
   newReminder({ name: "Pasaporte", groupId: personal.id }),
   newReminder({ name: "Cedula", groupId: personal.id }),
   newReminder({ name: "Slack password", groupId: work.id }),

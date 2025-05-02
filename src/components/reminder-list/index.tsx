@@ -20,7 +20,6 @@ export default function ReminderList() {
           }}
           onDelete={(e) => {
             console.log("deleting", e.nativeEvent.id);
-            deleteReminder(e.nativeEvent.id);
           }}
           onSelect={(e) => {
             console.log("selected", e.nativeEvent.id);

@@ -19,12 +19,3 @@ export function newGroup(params?: Partial<Group>): Group {
     ...params,
   };
 }
-
-export function newNode(node: Partial<TreeViewNode>): TreeViewNode {
-  return {
-    id: randomUUID(),
-    name: "new node",
-    children: null,
-    ...node,
-  };
-}

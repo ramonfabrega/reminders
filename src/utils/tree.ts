@@ -1,46 +1,41 @@
 import { Reminder, Group } from "@/types";
 import { TreeViewNode } from "@modules/expo-tree-view";
-import { newNode } from "./factory";
 
 export function buildTree(
   reminders: Reminder[],
   groups: Group[]
 ): TreeViewNode[] {
-  // First, build a map of all groups for quick lookup
-  const groupMap = new Map(groups.map((g) => [g.id, g]));
+  const groupsByParent = groupBy(groups, (g) => g.groupId);
+  const remindersByGroup = groupBy(reminders, (r) => r.groupId);
 
-  // Pre-filter reminders by group ID
-  const remindersByGroup = new Map<string, Reminder[]>();
-  reminders.forEach((reminder) => {
-    const groupId = reminder.groupId ?? "root";
-    if (!remindersByGroup.has(groupId)) {
-      remindersByGroup.set(groupId, []);
-    }
-    remindersByGroup.get(groupId)!.push(reminder);
-  });
+  function buildChildren(parentId: string | null): TreeViewNode[] {
+    const leafs = (remindersByGroup.get(parentId) || []).map((r) => ({
+      id: r.id,
+      name: r.name,
+      children: null,
+    }));
 
-  // Helper function to build a node from a group
-  const buildGroupNode = (group: Group): TreeViewNode => {
-    // Get all child groups by looking for groups that have this group as their parent
-    const childGroups = groups
-      .filter((g) => g.groupId === group.id)
-      .map(buildGroupNode);
+    const folders = (groupsByParent.get(parentId) || []).map((g) => ({
+      id: g.id,
+      name: g.name,
+      children: buildChildren(g.id),
+    }));
 
-    // Get reminders for this group (O(1) lookup)
-    const groupReminders = remindersByGroup.get(group.id) ?? [];
-    const childReminders = groupReminders.map(newNode);
+    return [...leafs, ...folders].sort((a, b) => a.name.localeCompare(b.name));
+  }
 
-    return newNode({ ...group, children: [...childGroups, ...childReminders] });
-  };
+  return buildChildren(null);
+}
 
-  // Start with root groups (groupId is null)
-  const rootGroups = groups.filter((g) => g.groupId === null);
-
-  // Build the tree starting from root groups
-  const rootNodes = rootGroups.map(buildGroupNode);
-
-  // Add root-level reminders (groupId is null)
-  const rootReminders = (remindersByGroup.get("root") ?? []).map(newNode);
-
-  return [...rootNodes, ...rootReminders];
+function groupBy<T, K extends string | null>(
+  items: T[],
+  keyFn: (item: T) => K
+): Map<K, T[]> {
+  return items.reduce((map, item) => {
+    const key = keyFn(item);
+    const arr = map.get(key) ?? [];
+    arr.push(item);
+    map.set(key, arr);
+    return map;
+  }, new Map<K, T[]>());
 }
