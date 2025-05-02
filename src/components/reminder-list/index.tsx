@@ -2,10 +2,19 @@ import { useReminderStore } from "@/stores/reminder-store";
 import { buildTree } from "@/utils/tree";
 
 import * as SwiftUI from "@expo/ui/swift-ui-primitives";
+
 import { TreeView } from "@modules/expo-tree-view";
+import { SafeAreaView, View, Text } from "react-native";
 
 export default function ReminderList() {
-  const { reminders, groups, addReminder, deleteReminder } = useReminderStore();
+  const {
+    reminders,
+    groups,
+    addReminder,
+    deleteReminder,
+    deleteGroup,
+    findById,
+  } = useReminderStore();
 
   const nodes = buildTree(reminders, groups);
 
@@ -16,13 +25,19 @@ export default function ReminderList() {
           title="Reminders"
           nodes={nodes}
           onCreate={() => {
-            addReminder("New Reminder");
+            addReminder("new root reminder");
           }}
           onDelete={(e) => {
-            console.log("deleting", e.nativeEvent.id);
+            const { reminder, group } = findById(e.nativeEvent.id);
+
+            if (reminder) deleteReminder(reminder.id);
+            if (group) deleteGroup(group.id);
+
+            console.log("deleting", { reminder, group });
           }}
           onSelect={(e) => {
-            console.log("selected", e.nativeEvent.id);
+            const { reminder, group } = findById(e.nativeEvent.id);
+            console.log("selected", { reminder, group });
           }}
         />
       </SwiftUI.VStack>

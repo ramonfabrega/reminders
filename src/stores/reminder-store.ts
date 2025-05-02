@@ -6,8 +6,10 @@ import { newGroup, newReminder } from "@/utils/factory";
 type ReminderStore = {
   reminders: Reminder[];
   groups: Group[];
-  addReminder: (name: string, groupId?: string) => void;
+  findById: (id: string) => { reminder: Reminder | null; group: Group | null };
+  addReminder: (name: string, groupId?: string | null) => void;
   deleteReminder: (id: string) => void;
+  deleteGroup: (id: string) => void;
 };
 
 const personal = newGroup({ name: "Personal" });
@@ -27,15 +29,28 @@ const reminders: Reminder[] = [
   newReminder({ name: "Cloud password", groupId: dev.id }),
 ];
 
-export const useReminderStore = create<ReminderStore>((set) => ({
+export const useReminderStore = create<ReminderStore>((set, get) => ({
   reminders,
   groups,
-  addReminder: (name: string, groupId: string | null = null) =>
+  findById: (id) => {
+    const reminder = get().reminders.find((r) => r.id === id);
+    if (reminder) return { reminder, group: null };
+
+    const group = get().groups.find((g) => g.id === id);
+    if (group) return { reminder: null, group };
+
+    return { reminder: null, group: null };
+  },
+  addReminder: (name, groupId = null) =>
     set((state) => ({
       reminders: [...state.reminders, newReminder({ name, groupId })],
     })),
-  deleteReminder: (id: string) =>
+  deleteReminder: (id) =>
     set((state) => ({
       reminders: state.reminders.filter((r) => r.id !== id),
+    })),
+  deleteGroup: (id) =>
+    set((state) => ({
+      groups: state.groups.filter((r) => r.id !== id),
     })),
 }));
