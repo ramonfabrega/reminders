@@ -67,7 +67,7 @@ struct TreeList: View {
 
     private func handleCreate(parentId: String?) {
         if let parentId = parentId {
-            withAnimation {
+            _ = withAnimation {
                 expanded.insert(parentId)
             }
         }
