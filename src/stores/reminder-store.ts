@@ -6,56 +6,64 @@ import { newGroup, newReminder } from "@/utils/factory";
 type ReminderStore = {
   reminders: Reminder[];
   groups: Group[];
-  findById: (id: string) => { reminder: Reminder | null; group: Group | null };
-  addReminder: (name: string, groupId?: string | null) => void;
-  deleteReminder: (id: string) => void;
-  addGroup: (name: string, groupId?: string | null) => void;
-  deleteGroup: (id: string) => void;
+
+  createRecord: (
+    type: "reminders" | "groups",
+    name: string,
+    groupId: string | null
+  ) => void;
+  deleteRecord: (id: string) => boolean;
 };
 
-const personal = newGroup({ name: "Personal" });
-const work = newGroup({ name: "Work" });
-const dev = newGroup({ name: "Dev", groupId: work.id });
-
-const groups = [personal, work, dev];
-
-const reminders: Reminder[] = [
-  newReminder({ name: "Doctor Appointment" }),
-  newReminder({ name: "Foo" }),
-  newReminder({ name: "bar" }),
-
-  newReminder({ name: "Pasaporte", groupId: personal.id }),
-  newReminder({ name: "Cedula", groupId: personal.id }),
-  newReminder({ name: "Slack password", groupId: work.id }),
-  newReminder({ name: "Cloud password", groupId: dev.id }),
-];
-
-export const useReminderStore = create<ReminderStore>((set, get) => ({
-  reminders,
-  groups,
-  findById: (id) => {
+export const useReminderStore = create<ReminderStore>((set, get) => {
+  function findType(id: string) {
     const reminder = get().reminders.find((r) => r.id === id);
-    if (reminder) return { reminder, group: null };
+    if (reminder) return "reminders";
 
     const group = get().groups.find((g) => g.id === id);
-    if (group) return { reminder: null, group };
+    if (group) return "groups";
 
-    return { reminder: null, group: null };
-  },
-  addReminder: (name, groupId = null) =>
-    set((state) => ({
-      reminders: [...state.reminders, newReminder({ name, groupId })],
-    })),
-  deleteReminder: (id) =>
-    set((state) => ({
-      reminders: state.reminders.filter((r) => r.id !== id),
-    })),
-  addGroup: (name, groupId = null) =>
-    set((state) => ({
-      groups: [...state.groups, newGroup({ name, groupId })],
-    })),
-  deleteGroup: (id) =>
-    set((state) => ({
-      groups: state.groups.filter((r) => r.id !== id),
-    })),
-}));
+    return null;
+  }
+
+  const personal = newGroup({ name: "Personal" });
+  const work = newGroup({ name: "Work" });
+  const dev = newGroup({ name: "Dev", groupId: work.id });
+
+  const groups = [personal, work, dev];
+
+  const reminders: Reminder[] = [
+    newReminder({ name: "Doctor Appointment" }),
+    newReminder({ name: "Foo" }),
+    newReminder({ name: "bar" }),
+
+    newReminder({ name: "Pasaporte", groupId: personal.id }),
+    newReminder({ name: "Cedula", groupId: personal.id }),
+    newReminder({ name: "Slack password", groupId: work.id }),
+    newReminder({ name: "Cloud password", groupId: dev.id }),
+  ];
+
+  return {
+    reminders,
+    groups,
+    createRecord(type, name, groupId) {
+      function newValue() {
+        switch (type) {
+          case "reminders":
+            return newReminder({ name, groupId });
+          case "groups":
+            return newGroup({ name, groupId });
+        }
+      }
+
+      set((state) => ({ [type]: [...state[type], newValue()] }));
+    },
+    deleteRecord(id) {
+      const type = findType(id);
+      if (!type) return false;
+
+      set((state) => ({ [type]: state[type].filter((r) => r.id !== id) }));
+      return true;
+    },
+  };
+});

@@ -6,15 +6,7 @@ import * as SwiftUI from "@expo/ui/swift-ui-primitives";
 import { TreeView } from "@modules/expo-tree-view";
 
 export default function ReminderList() {
-  const {
-    reminders,
-    groups,
-    addReminder,
-    deleteReminder,
-    addGroup,
-    deleteGroup,
-    findById,
-  } = useReminderStore();
+  const { reminders, groups, createRecord, deleteRecord } = useReminderStore();
 
   const nodes = buildTree(reminders, groups);
 
@@ -25,30 +17,21 @@ export default function ReminderList() {
           title="Reminders"
           nodes={nodes}
           createActions={[
-            { id: "reminder", title: "Reminder", icon: "document.badge.plus" },
-            { id: "group", title: "Group", icon: "folder.badge.plus" },
+            { id: "reminders", title: "Reminder", icon: "document.badge.plus" },
+            { id: "groups", title: "Group", icon: "folder.badge.plus" },
           ]}
           onCreate={(e) => {
-            switch (e.nativeEvent.actionId) {
-              case "reminder":
-                addReminder("new reminder", e.nativeEvent.groupId);
-                return;
-              case "group":
-                addGroup("new group", e.nativeEvent.groupId);
-                return;
-            }
+            createRecord(
+              e.nativeEvent.actionId,
+              "new-item",
+              e.nativeEvent.groupId
+            );
           }}
           onDelete={(e) => {
-            console.log("delete", e.nativeEvent);
-            const { reminder, group } = findById(e.nativeEvent.id);
-
-            if (reminder) deleteReminder(reminder.id);
-            if (group) deleteGroup(group.id);
+            deleteRecord(e.nativeEvent.id);
           }}
           onSelect={(e) => {
             console.log("select", e.nativeEvent);
-            const { reminder, group } = findById(e.nativeEvent.id);
-            console.log("selected", { reminder, group });
           }}
         />
       </SwiftUI.VStack>
