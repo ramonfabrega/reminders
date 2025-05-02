@@ -11,6 +11,7 @@ export default function ReminderList() {
     groups,
     addReminder,
     deleteReminder,
+    addGroup,
     deleteGroup,
     findById,
   } = useReminderStore();
@@ -23,16 +24,29 @@ export default function ReminderList() {
         <TreeView
           title="Reminders"
           nodes={nodes}
+          createActions={[
+            { id: "reminder", title: "Reminder", icon: "document.badge.plus" },
+            { id: "group", title: "Group", icon: "folder.badge.plus" },
+          ]}
           onCreate={(e) => {
-            addReminder("new reminder", e.nativeEvent.groupId);
+            switch (e.nativeEvent.actionId) {
+              case "reminder":
+                addReminder("new reminder", e.nativeEvent.groupId);
+                return;
+              case "group":
+                addGroup("new group", e.nativeEvent.groupId);
+                return;
+            }
           }}
           onDelete={(e) => {
+            console.log("delete", e.nativeEvent);
             const { reminder, group } = findById(e.nativeEvent.id);
 
             if (reminder) deleteReminder(reminder.id);
             if (group) deleteGroup(group.id);
           }}
           onSelect={(e) => {
+            console.log("select", e.nativeEvent);
             const { reminder, group } = findById(e.nativeEvent.id);
             console.log("selected", { reminder, group });
           }}

@@ -10,7 +10,8 @@
     "ios:metadata": "eas metadata:push",
     "web": "expo start --web",
     "web:build": "expo export --platform web --clear",
-    "web:deploy": "bun web:build && eas deploy"
+    "web:deploy": "bun web:build && eas deploy",
+    "android": "expo run:android"
   },
   "dependencies": {
     "@expo/ui": "~0.1.1-alpha.7",

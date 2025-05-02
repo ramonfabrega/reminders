@@ -1,5 +1,61 @@
 import SwiftUI
 
+struct CreateActionData: Identifiable, Codable {
+    let id: String
+    let title: String
+    let icon: String
+}
+
+struct CreateAction: Identifiable {
+    let data: CreateActionData
+    let action: (String?) -> Void
+    var id: String { data.id }
+}
+
+@available(iOS 17.0, *)
+struct CreateActionButton: View {
+    let createActions: [CreateAction]
+    let parentId: String?
+    let onExpand: (String?) -> Void
+    @State private var newButtonPressed = false
+
+    var body: some View {
+        if createActions.count == 1 {
+            Button {
+                newButtonPressed.toggle()
+                onExpand(parentId)
+                if let action = createActions.first {
+                    action.action(parentId)
+                }
+            } label: {
+                HStack {
+                    Image(systemName: createActions.first?.data.icon ?? "plus")
+                    Text("New")
+                }
+            }
+            .sensoryFeedback(.impact(weight: .medium), trigger: newButtonPressed)
+        } else {
+            Menu {
+                ForEach(createActions) { action in
+                    Button {
+                        newButtonPressed.toggle()
+                        onExpand(parentId)
+                        action.action(parentId)
+                    } label: {
+                        Label(action.data.title, systemImage: action.data.icon)
+                    }
+                }
+            } label: {
+                HStack {
+                    Image(systemName: "plus")
+                    Text("New")
+                }
+            }
+            .sensoryFeedback(.impact(weight: .medium), trigger: newButtonPressed)
+        }
+    }
+}
+
 struct Node: Hashable, Identifiable, Codable {
     let id: String
     let name: String
@@ -10,13 +66,12 @@ struct Node: Hashable, Identifiable, Codable {
 struct TreeList: View {
     let title: String
     let nodes: [Node]
-    let onCreate: (String?) -> Void
     let onDelete: (String) -> Void
     let onSelect: (String) -> Void
+    let createActions: [CreateAction]
     @State private var searchText: String = ""
     @State private var expanded = Set<String>()
     @State private var savedExpanded: Set<String>? = nil
-    @State private var newButtonPressed = false
 
     private func filtered(_ items: [Node]) -> [Node] {
         items.compactMap { node in
@@ -71,14 +126,13 @@ struct TreeList: View {
                 expanded.insert(parentId)
             }
         }
-        onCreate(parentId)
     }
 
     var body: some View {
         NavigationView {
             List {
                 ForEach(searchText.isEmpty ? nodes : filtered(nodes)) { item in
-                    TreeNodeView(node: item, expanded: $expanded, onSelect: onSelect, onDelete: onDelete, onCreate: handleCreate)
+                    TreeNodeView(node: item, expanded: $expanded, onSelect: onSelect, onDelete: onDelete, createActions: createActions, onCreate: handleCreate)
                 }
             }
             .navigationTitle(title)
@@ -104,14 +158,7 @@ struct TreeList: View {
                     }
                 }
 
-                Button(action: {
-                    newButtonPressed.toggle()
-                    onCreate(nil)
-                }) {
-                    Image(systemName: "plus")
-                    Text("New")
-                }
-                .sensoryFeedback(.impact(weight: .medium), trigger: newButtonPressed)
+                CreateActionButton(createActions: createActions, parentId: nil, onExpand: handleCreate)
             }
             .searchable(text: $searchText, prompt: "Search…")
             .onChange(of: searchText) {
@@ -136,14 +183,15 @@ struct TreeNodeView: View {
     @Binding var expanded: Set<String>
     let onSelect: (String) -> Void
     let onDelete: (String) -> Void
+    let createActions: [CreateAction]
     let onCreate: (String?) -> Void
 
     var body: some View {
         if let children = node.children {
             if children.isEmpty {
-                EmptyGroupNode(node: node, onDelete: onDelete, onCreate: onCreate)
+                EmptyGroupNode(node: node, onDelete: onDelete, createActions: createActions, onCreate: onCreate)
             } else {
-                GroupNode(node: node, expanded: $expanded, onSelect: onSelect, onDelete: onDelete, onCreate: onCreate)
+                GroupNode(node: node, expanded: $expanded, onSelect: onSelect, onDelete: onDelete, createActions: createActions, onCreate: onCreate)
             }
         } else {
             LeafNode(node: node, onSelect: onSelect, onDelete: onDelete)
@@ -183,6 +231,7 @@ struct LeafNode: View {
 struct EmptyGroupNode: View {
     let node: Node
     let onDelete: (String) -> Void
+    let createActions: [CreateAction]
     let onCreate: (String?) -> Void
     @State private var deleteTriggered = false
 
@@ -196,12 +245,8 @@ struct EmptyGroupNode: View {
                     Label("Delete", systemImage: "trash")
                 }
 
-                Button {
-                    onCreate(node.id)
-                } label: {
-                    Label("Add", systemImage: "plus")
-                }
-                .tint(.accentColor)
+                CreateActionButton(createActions: createActions, parentId: node.id, onExpand: onCreate)
+                    .tint(.accentColor)
             }
             .sensoryFeedback(.impact(weight: .heavy), trigger: deleteTriggered)
     }
@@ -213,6 +258,7 @@ struct GroupNode: View {
     @Binding var expanded: Set<String>
     let onSelect: (String) -> Void
     let onDelete: (String) -> Void
+    let createActions: [CreateAction]
     let onCreate: (String?) -> Void
 
     var body: some View {
@@ -233,18 +279,15 @@ struct GroupNode: View {
                     expanded: $expanded,
                     onSelect: onSelect,
                     onDelete: onDelete,
+                    createActions: createActions,
                     onCreate: onCreate
                 )
             }
         } label: {
             Text("📁 \(node.name)")
                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                    Button {
-                        onCreate(node.id)
-                    } label: {
-                        Label("Add", systemImage: "plus")
-                    }
-                    .tint(.accentColor)
+                    CreateActionButton(createActions: createActions, parentId: node.id, onExpand: onCreate)
+                        .tint(.accentColor)
                 }
         }
         .sensoryFeedback(.impact(weight: .light), trigger: expanded.contains(node.id))
@@ -273,9 +316,30 @@ struct GroupNode: View {
             ]),
             Node(id: "11", name: "private", children: nil)
         ],
-        onCreate: { _ in },
         onDelete: { _ in },
-        onSelect: { _ in }
+        onSelect: { _ in },
+        createActions: [
+            CreateAction(
+                data: CreateActionData(
+                    id: "item",
+                    title: "New Item",
+                    icon: "plus"
+                ),
+                action: { parentId in
+                    print("Creating new item in \(parentId ?? "root")")
+                }
+            ),
+            CreateAction(
+                data: CreateActionData(
+                    id: "folder",
+                    title: "New Folder",
+                    icon: "folder.badge.plus"
+                ),
+                action: { parentId in
+                    print("Creating new folder in \(parentId ?? "root")")
+                }
+            )
+        ]
     )
 }
 #endif

@@ -9,6 +9,7 @@ type ReminderStore = {
   findById: (id: string) => { reminder: Reminder | null; group: Group | null };
   addReminder: (name: string, groupId?: string | null) => void;
   deleteReminder: (id: string) => void;
+  addGroup: (name: string, groupId?: string | null) => void;
   deleteGroup: (id: string) => void;
 };
 
@@ -48,6 +49,10 @@ export const useReminderStore = create<ReminderStore>((set, get) => ({
   deleteReminder: (id) =>
     set((state) => ({
       reminders: state.reminders.filter((r) => r.id !== id),
+    })),
+  addGroup: (name, groupId = null) =>
+    set((state) => ({
+      groups: [...state.groups, newGroup({ name, groupId })],
     })),
   deleteGroup: (id) =>
     set((state) => ({
