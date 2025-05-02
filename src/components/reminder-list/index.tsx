@@ -4,7 +4,6 @@ import { buildTree } from "@/utils/tree";
 import * as SwiftUI from "@expo/ui/swift-ui-primitives";
 
 import { TreeView } from "@modules/expo-tree-view";
-import { SafeAreaView, View, Text } from "react-native";
 
 export default function ReminderList() {
   const {
@@ -24,16 +23,14 @@ export default function ReminderList() {
         <TreeView
           title="Reminders"
           nodes={nodes}
-          onCreate={() => {
-            addReminder("new root reminder");
+          onCreate={(e) => {
+            addReminder("new reminder", e.nativeEvent.groupId);
           }}
           onDelete={(e) => {
             const { reminder, group } = findById(e.nativeEvent.id);
 
             if (reminder) deleteReminder(reminder.id);
             if (group) deleteGroup(group.id);
-
-            console.log("deleting", { reminder, group });
           }}
           onSelect={(e) => {
             const { reminder, group } = findById(e.nativeEvent.id);

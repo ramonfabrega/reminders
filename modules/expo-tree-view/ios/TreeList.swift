@@ -10,7 +10,7 @@ struct Node: Hashable, Identifiable, Codable {
 struct TreeList: View {
     let title: String
     let nodes: [Node]
-    let onCreate: () -> Void
+    let onCreate: (String?) -> Void
     let onDelete: (String) -> Void
     let onSelect: (String) -> Void
     @State private var searchText: String = ""
@@ -69,7 +69,7 @@ struct TreeList: View {
         NavigationView {
             List {
                 ForEach(searchText.isEmpty ? nodes : filtered(nodes)) { item in
-                    TreeNodeView(node: item, expanded: $expanded, onSelect: onSelect, onDelete: onDelete)
+                    TreeNodeView(node: item, expanded: $expanded, onSelect: onSelect, onDelete: onDelete, onCreate: onCreate)
                 }
             }
             .navigationTitle(title)
@@ -97,7 +97,7 @@ struct TreeList: View {
 
                 Button(action: {
                     newButtonPressed.toggle()
-                    onCreate()
+                    onCreate(nil)
                 }) {
                     Image(systemName: "plus")
                     Text("New")
@@ -127,13 +127,14 @@ struct TreeNodeView: View {
     @Binding var expanded: Set<String>
     let onSelect: (String) -> Void
     let onDelete: (String) -> Void
+    let onCreate: (String?) -> Void
 
     var body: some View {
         if let children = node.children {
             if children.isEmpty {
-                EmptyGroupNode(node: node, onDelete: onDelete)
+                EmptyGroupNode(node: node, onDelete: onDelete, onCreate: onCreate)
             } else {
-                GroupNode(node: node, expanded: $expanded, onSelect: onSelect, onDelete: onDelete)
+                GroupNode(node: node, expanded: $expanded, onSelect: onSelect, onDelete: onDelete, onCreate: onCreate)
             }
         } else {
             LeafNode(node: node, onSelect: onSelect, onDelete: onDelete)
@@ -173,6 +174,7 @@ struct LeafNode: View {
 struct EmptyGroupNode: View {
     let node: Node
     let onDelete: (String) -> Void
+    let onCreate: (String?) -> Void
     @State private var deleteTriggered = false
 
     var body: some View {
@@ -186,7 +188,7 @@ struct EmptyGroupNode: View {
                 }
 
                 Button {
-                    // Add action here when needed
+                    onCreate(node.id)
                 } label: {
                     Label("Add", systemImage: "plus")
                 }
@@ -202,6 +204,7 @@ struct GroupNode: View {
     @Binding var expanded: Set<String>
     let onSelect: (String) -> Void
     let onDelete: (String) -> Void
+    let onCreate: (String?) -> Void
 
     var body: some View {
         DisclosureGroup(
@@ -220,14 +223,15 @@ struct GroupNode: View {
                     node: child,
                     expanded: $expanded,
                     onSelect: onSelect,
-                    onDelete: onDelete
+                    onDelete: onDelete,
+                    onCreate: onCreate
                 )
             }
         } label: {
             Text("📁 \(node.name)")
                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                     Button {
-                        // Add action here when needed
+                        onCreate(node.id)
                     } label: {
                         Label("Add", systemImage: "plus")
                     }
@@ -260,7 +264,7 @@ struct GroupNode: View {
             ]),
             Node(id: "11", name: "private", children: nil)
         ],
-        onCreate: {},
+        onCreate: { _ in },
         onDelete: { _ in },
         onSelect: { _ in }
     )

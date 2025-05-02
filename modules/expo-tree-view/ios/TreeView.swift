@@ -28,7 +28,7 @@ struct TreeView: ExpoSwiftUI.View {
             TreeList(
                 title: props.title,
                 nodes: parseNodes(),
-                onCreate: { props.onCreate() },
+                onCreate: { id in props.onCreate(["groupId": id ?? NSNull()]) },
                 onDelete: { id in props.onDelete(["id": id]) },
                 onSelect: { id in props.onSelect(["id": id]) }
             )
