@@ -10,18 +10,7 @@ export default function RootLayout() {
   return (
     <>
       <StatusBar style="auto" />
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          // headerShown: true,
-          // headerLargeTitle: true,
-          // headerTransparent: false,
-          // headerSearchBarOptions: {
-          //   placeholder: "Search...",
-          //   onChangeText: (text) => {},
-          // },
-        }}
-      />
+      <Stack screenOptions={{ headerShown: false }} />
     </>
   );
 }

@@ -39,6 +39,8 @@ export default function TabsLayout() {
           title: "Settings",
         }}
       />
+      <Tabs.Screen name="(all)" />
+      <Tabs.Screen name="(sorted)" />
     </Tabs>
   );
 }
