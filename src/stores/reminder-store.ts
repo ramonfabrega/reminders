@@ -35,7 +35,17 @@ export const useReminderStore = create<ReminderStore>((set, get) => {
   const reminders: Reminder[] = [
     newReminder({ name: "Doctor Appointment" }),
     newReminder({ name: "Foo" }),
-    newReminder({ name: "bar" }),
+    // newReminder({ name: "bar" }),
+    // newReminder({ name: "bar" }),
+    // newReminder({ name: "bar" }),
+    // newReminder({ name: "bar" }),
+    // newReminder({ name: "bar" }),
+    // newReminder({ name: "bar" }),
+    // newReminder({ name: "bar" }),
+    // newReminder({ name: "bar" }),
+    // newReminder({ name: "bar" }),
+    // newReminder({ name: "bar" }),
+    // newReminder({ name: "bar" }),
 
     newReminder({ name: "Pasaporte", groupId: personal.id }),
     newReminder({ name: "Cedula", groupId: personal.id }),

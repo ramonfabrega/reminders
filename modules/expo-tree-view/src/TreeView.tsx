@@ -1,4 +1,5 @@
 import { requireNativeView } from "expo";
+import { Host } from "@expo/ui/swift-ui";
 import { SFSymbol } from "expo-symbols";
 import { NativeSyntheticEvent } from "react-native";
 
@@ -10,21 +11,15 @@ export type TreeViewNode = {
   children: TreeViewNode[] | null;
 };
 
-type TouchEvent<T = {}> = NativeSyntheticEvent<T>;
-
-export type CreateAction<T = string> = {
-  id: T;
-  title: string;
-  icon: SFSymbol;
-};
+type Event<T = {}> = NativeSyntheticEvent<T>;
 
 export type TreeViewProps<T extends string = string> = {
   title: string;
   nodes: TreeViewNode[];
-  createActions: CreateAction<T>[];
-  onDelete?: (e: TouchEvent<{ id: string }>) => void;
-  onSelect?: (e: TouchEvent<{ id: string }>) => void;
-  onCreate?: (e: TouchEvent<{ groupId: string | null; actionId: T }>) => void;
+  createActions: Array<{ id: T; title: string; icon: SFSymbol }>;
+  onDelete?: (e: Event<{ id: string }>) => void;
+  onSelect?: (e: Event<{ id: string }>) => void;
+  onCreate?: (e: Event<{ groupId: string | null; actionId: T }>) => void;
 };
 
 export function TreeView<T extends string>({
