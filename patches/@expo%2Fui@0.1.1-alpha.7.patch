@@ -1,0 +1,18 @@
+diff --git a/node_modules/@expo/ui/.bun-tag-70dc74a5b7cb2d33 b/.bun-tag-70dc74a5b7cb2d33
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/build/swift-ui/TextInput/index.d.ts b/build/swift-ui/TextInput/index.d.ts
+index 79b6823c43fff17744ea5076fcf9481e4c57c417..c740fc93585e23c40ad0287ddbf1638d82ab1863 100644
+--- a/build/swift-ui/TextInput/index.d.ts
++++ b/build/swift-ui/TextInput/index.d.ts
+@@ -13,6 +13,10 @@ export type TextInputProps = {
+      * A callback triggered when user types in text into the TextInput.
+      */
+     onChangeText: (value: string) => void;
++    /**
++     * The string that will be rendered before text input has been entered.
++     */
++    placeholder?: string;
+     /**
+      * If true, the text input can be multiple lines.
+      * While the content will wrap, there's no keyboard button to insert a new line.

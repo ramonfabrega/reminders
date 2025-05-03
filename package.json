@@ -42,5 +42,8 @@
     "eas-cli": "^16.3.3",
     "typescript": "^5.3.3"
   },
-  "private": true
+  "private": true,
+  "patchedDependencies": {
+    "@expo/ui@0.1.1-alpha.7": "patches/@expo%2Fui@0.1.1-alpha.7.patch"
+  }
 }
