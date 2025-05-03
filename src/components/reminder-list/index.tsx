@@ -39,12 +39,11 @@ export default function ReminderList() {
           }}
           onSelect={(e) => {
             const task = tasks.find((r) => r.id === e.nativeEvent.id);
-            if (task) setSelectedTask(task);
+            // if (task) setSelectedTask(task);
           }}
         />
       </SwiftUI.Host>
-
-      <View>
+      {/* <View>
         <SwiftUI.Host style={{ position: "absolute" }}>
           <SwiftUI.BottomSheet
             isOpened={isOpen}
@@ -53,7 +52,7 @@ export default function ReminderList() {
             <TaskView task={selectedTask} />
           </SwiftUI.BottomSheet>
         </SwiftUI.Host>
-      </View>
+      </View> */}
     </>
   );
 }
