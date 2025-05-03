@@ -3,6 +3,7 @@
   "version": "1.0.1",
   "main": "expo-router/entry",
   "scripts": {
+    "start": "expo start",
     "ios": "bun ios:prebuild && expo run:ios",
     "ios:prebuild": "expo prebuild --platform ios --clean",
     "ios:update": "eas update -p ios --channel production",
