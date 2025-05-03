@@ -16,14 +16,14 @@ struct CreateAction: Identifiable {
 struct CreateActionButton: View {
     let createActions: [CreateAction]
     let parentId: String?
-    let onExpand: (String?) -> Void
+    let onCreate: (String?) -> Void
     @State private var newButtonPressed = false
 
     var body: some View {
         if createActions.count == 1 {
             Button {
                 newButtonPressed.toggle()
-                onExpand(parentId)
+                onCreate(parentId)
                 if let action = createActions.first {
                     action.action(parentId)
                 }
@@ -39,7 +39,7 @@ struct CreateActionButton: View {
                 ForEach(createActions) { action in
                     Button {
                         newButtonPressed.toggle()
-                        onExpand(parentId)
+                        onCreate(parentId)
                         action.action(parentId)
                     } label: {
                         Label(action.data.title, systemImage: action.data.icon)
@@ -124,7 +124,7 @@ struct TreeList: View {
             }
             .navigationTitle(title)
             .toolbar {
-                CreateActionButton(createActions: createActions, parentId: nil, onExpand: handleCreate)
+                CreateActionButton(createActions: createActions, parentId: nil, onCreate: handleCreate)
             }
             .searchable(text: $searchText, prompt: "Search…")
             .onChange(of: searchText) {
@@ -211,7 +211,7 @@ struct EmptyGroupNode: View {
                     Label("Delete", systemImage: "trash")
                 }
 
-                CreateActionButton(createActions: createActions, parentId: node.id, onExpand: onCreate)
+                CreateActionButton(createActions: createActions, parentId: node.id, onCreate: onCreate)
             }
             .sensoryFeedback(.impact(weight: .heavy), trigger: deleteTriggered)
     }
@@ -251,7 +251,7 @@ struct GroupNode: View {
         } label: {
             Text("📁 \(node.name)")
                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                    CreateActionButton(createActions: createActions, parentId: node.id, onExpand: onCreate)
+                    CreateActionButton(createActions: createActions, parentId: node.id, onCreate: onCreate)
                         .tint(.accentColor)
                 }
         }
