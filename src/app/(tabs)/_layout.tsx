@@ -12,7 +12,7 @@ export default function TabsLayout() {
             active: "list.bullet",
             inactive: "list.bullet",
           }),
-          title: "Reminders",
+          title: "Tasks",
         }}
       />
       <Tabs.Screen

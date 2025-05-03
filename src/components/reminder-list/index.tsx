@@ -1,32 +1,30 @@
 import { useState } from "react";
-import { View, Text, ActivityIndicator, TextInput } from "react-native";
+import { View } from "react-native";
 
 import * as SwiftUI from "@expo/ui/swift-ui-primitives";
 import { TreeView } from "@modules/expo-tree-view";
 
-import { useReminderStore } from "@/stores/reminder-store";
-import { Reminder } from "@/types";
+import { useTaskStore } from "@/stores/task-store";
+import { Task } from "@/types";
 import { buildTree } from "@/utils/tree";
 
 export default function ReminderList() {
-  const { reminders, groups, createRecord, deleteRecord } = useReminderStore();
+  const { tasks, groups, createRecord, deleteRecord } = useTaskStore();
 
-  const nodes = buildTree(reminders, groups);
+  const nodes = buildTree(tasks, groups);
 
-  const [selectedReminder, setSelectedReminder] = useState<Reminder | null>(
-    null
-  );
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
-  const isOpen = selectedReminder !== null;
+  const isOpen = selectedTask !== null;
 
   return (
     <>
       <SwiftUI.Host style={{ flex: 1 }}>
         <TreeView
-          title="Reminders"
+          title="Tasks"
           nodes={nodes}
           createActions={[
-            { id: "reminders", title: "Reminder", icon: "document.badge.plus" },
+            { id: "tasks", title: "Task", icon: "document.badge.plus" },
             { id: "groups", title: "Group", icon: "folder.badge.plus" },
           ]}
           onCreate={(e) => {
@@ -40,8 +38,8 @@ export default function ReminderList() {
             deleteRecord(e.nativeEvent.id);
           }}
           onSelect={(e) => {
-            const reminder = reminders.find((r) => r.id === e.nativeEvent.id);
-            if (reminder) setSelectedReminder(reminder);
+            const task = tasks.find((r) => r.id === e.nativeEvent.id);
+            if (task) setSelectedTask(task);
           }}
         />
       </SwiftUI.Host>
@@ -50,9 +48,9 @@ export default function ReminderList() {
         <SwiftUI.Host style={{ position: "absolute" }}>
           <SwiftUI.BottomSheet
             isOpened={isOpen}
-            onIsOpenedChange={() => setSelectedReminder(null)}
+            onIsOpenedChange={() => setSelectedTask(null)}
           >
-            <ReminderView reminder={selectedReminder} />
+            <TaskView task={selectedTask} />
           </SwiftUI.BottomSheet>
         </SwiftUI.Host>
       </View>
@@ -60,20 +58,20 @@ export default function ReminderList() {
   );
 }
 
-type ReminderViewProps = {
-  reminder: Reminder | null;
+type TaskViewProps = {
+  task: Task | null;
 };
-function ReminderView({ reminder }: ReminderViewProps) {
-  const [value, setValue] = useState("starting val");
+function TaskView({ task }: TaskViewProps) {
+  const [_, setValue] = useState("starting val");
 
-  if (!reminder) return null;
+  if (!task) return null;
 
   return (
     <SwiftUI.Host matchContents>
       <SwiftUI.VStack padding={20}>
         <SwiftUI.Button>hi</SwiftUI.Button>
         <SwiftUI.Text>lmao</SwiftUI.Text>
-        <SwiftUI.TextInput defaultValue="Name" onChangeText={setValue} />
+        <SwiftUI.TextInput placeholder="Name" onChangeText={setValue} />
       </SwiftUI.VStack>
     </SwiftUI.Host>
   );

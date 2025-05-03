@@ -1,9 +1,9 @@
 import { randomUUID } from "expo-crypto";
 
-import { Group, Reminder } from "@/types";
+import { Group, Task } from "@/types";
 
-export function newReminder(params?: Partial<Reminder>): Reminder {
-  return { id: randomUUID(), name: "new reminder", groupId: null, ...params };
+export function newTask(params?: Partial<Task>): Task {
+  return { id: randomUUID(), name: "new task", groupId: null, ...params };
 }
 
 export function newGroup(params?: Partial<Group>): Group {

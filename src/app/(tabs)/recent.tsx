@@ -1,18 +1,16 @@
-import { StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+
+import * as SwiftUI from "@expo/ui/swift-ui-primitives";
 
 export default function Page() {
+  const [_, setValue] = useState("");
   return (
-    <View style={styles.container}>
-      <Text>recent</Text>
-    </View>
+    <SwiftUI.Host style={{ flex: 1 }}>
+      <SwiftUI.Form>
+        <SwiftUI.Section title="Name">
+          <SwiftUI.TextInput placeholder="Nombre" onChangeText={setValue} />
+        </SwiftUI.Section>
+      </SwiftUI.Form>
+    </SwiftUI.Host>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    margin: 8,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
